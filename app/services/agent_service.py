@@ -9,8 +9,6 @@ from app.models.ml_models import preeclampsia_model
 llm = None
 agent = None
 
-print(OPENAI_API_KEY)
-
 if OPENAI_API_KEY:
     llm = ChatOpenAI(temperature=0, openai_api_key=OPENAI_API_KEY)
 
