@@ -1,0 +1,494 @@
+{
+  "total": 18,
+  "passed": 12,
+  "failed": 6,
+  "success_rate": 66.66666666666666,
+  "details": {
+    "docs": [
+      {
+        "status_code": 200,
+        "success": true,
+        "response_time": 0.003658,
+        "content_type": "text/html; charset=utf-8",
+        "response": "\n    <!DOCTYPE html>\n    <html>\n    <head>\n    <link type=\"text/css\" rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css\">\n    <link rel=\"shortcut icon\" href=\"https://fastapi.tiangolo.com/img/favicon.png\">\n    <title>Medical AI Assistant - Swagger UI</title>\n    </head>\n    <body>\n    <div id=\"swagger-ui\">\n    </div>\n    <script src=\"https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js\"></script>\n    <!-- `SwaggerUIBundle` is now available on the p"
+      },
+      {
+        "status_code": 200,
+        "success": true,
+        "response_time": 0.003149,
+        "content_type": "text/html; charset=utf-8",
+        "response": "\n    <!DOCTYPE html>\n    <html>\n    <head>\n    <title>Medical AI Assistant - ReDoc</title>\n    <!-- needed for adaptive design -->\n    <meta charset=\"utf-8\"/>\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    \n    <link href=\"https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:300,400,700\" rel=\"stylesheet\">\n    \n    <link rel=\"shortcut icon\" href=\"https://fastapi.tiangolo.com/img/favicon.png\">\n    <!--\n    ReDoc doesn't change outer page styles\n    --"
+      },
+      {
+        "status_code": 200,
+        "success": true,
+        "response_time": 0.010568,
+        "content_type": "application/json",
+        "response": {
+          "openapi": "3.1.0",
+          "info": {
+            "title": "Medical AI Assistant",
+            "description": "AI-powered medical assistant for preeclampsia risk assessment",
+            "version": "0.1.0"
+          },
+          "paths": {
+            "/chat": {
+              "post": {
+                "summary": "Chat Endpoint",
+                "description": "Handle chat messages and provide medical assistance",
+                "operationId": "chat_endpoint_chat_post",
+                "requestBody": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ChatInput"
+                      }
+                    }
+                  },
+                  "required": true
+                },
+                "responses": {
+                  "200": {
+                    "description": "Successful Response",
+                    "content": {
+                      "application/json": {
+                        "schema": {}
+                      }
+                    }
+                  },
+                  "422": {
+                    "description": "Validation Error",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/HTTPValidationError"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "/predict": {
+              "post": {
+                "summary": "Predict Endpoint",
+                "description": "Make preeclampsia prediction using ML model",
+                "operationId": "predict_endpoint_predict_post",
+                "requestBody": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/FormInput"
+                      }
+                    }
+                  },
+                  "required": true
+                },
+                "responses": {
+                  "200": {
+                    "description": "Successful Response",
+                    "content": {
+                      "application/json": {
+                        "schema": {}
+                      }
+                    }
+                  },
+                  "422": {
+                    "description": "Validation Error",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/HTTPValidationError"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "/extract": {
+              "post": {
+                "summary": "Extract Variables",
+                "description": "Extract variables from medical test result images and make prediction",
+                "operationId": "extract_variables_extract_post",
+                "requestBody": {
+                  "content": {
+                    "multipart/form-data": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Body_extract_variables_extract_post"
+                      }
+                    }
+                  },
+                  "required": true
+                },
+                "responses": {
+                  "200": {
+                    "description": "Successful Response",
+                    "content": {
+                      "application/json": {
+                        "schema": {}
+                      }
+                    }
+                  },
+                  "422": {
+                    "description": "Validation Error",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/HTTPValidationError"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "/normalize_variables": {
+              "post": {
+                "summary": "Normalize Variables",
+                "description": "Normalize user input variables for ML model",
+                "operationId": "normalize_variables_normalize_variables_post",
+                "requestBody": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/Body_normalize_variables_normalize_variables_post"
+                      }
+                    }
+                  },
+                  "required": true
+                },
+                "responses": {
+                  "200": {
+                    "description": "Successful Response",
+                    "content": {
+                      "application/json": {
+                        "schema": {}
+                      }
+                    }
+                  },
+                  "422": {
+                    "description": "Validation Error",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/HTTPValidationError"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "components": {
+            "schemas": {
+              "Body_extract_variables_extract_post": {
+                "properties": {
+                  "files": {
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    },
+                    "type": "array",
+                    "title": "Files"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "files"
+                ],
+                "title": "Body_extract_variables_extract_post"
+              },
+              "Body_normalize_variables_normalize_variables_post": {
+                "properties": {
+                  "user_input": {
+                    "type": "string",
+                    "title": "User Input"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "user_input"
+                ],
+                "title": "Body_normalize_variables_normalize_variables_post"
+              },
+              "ChatInput": {
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "title": "Message"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "message"
+                ],
+                "title": "ChatInput"
+              },
+              "FormInput": {
+                "properties": {
+                  "variables": {
+                    "items": {
+                      "type": "number"
+                    },
+                    "type": "array",
+                    "title": "Variables"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "variables"
+                ],
+                "title": "FormInput"
+              },
+              "HTTPValidationError": {
+                "properties": {
+                  "detail": {
+                    "items": {
+                      "$ref": "#/components/schemas/ValidationError"
+                    },
+                    "type": "array",
+                    "title": "Detail"
+                  }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+              },
+              "ValidationError": {
+                "properties": {
+                  "loc": {
+                    "items": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    },
+                    "type": "array",
+                    "title": "Location"
+                  },
+                  "msg": {
+                    "type": "string",
+                    "title": "Message"
+                  },
+                  "type": {
+                    "type": "string",
+                    "title": "Error Type"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "loc",
+                  "msg",
+                  "type"
+                ],
+                "title": "ValidationError"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "chat": [
+      {
+        "status_code": 200,
+        "success": true,
+        "response_time": 5.761462,
+        "content_type": "application/json",
+        "response": {
+          "response": "Diabetes is a chronic medical condition that affects how the body turns food into energy. It can be classified into type 1 and type 2, with type 1 involving the immune system attacking insulin-producing cells and type 2 involving insulin resistance or insufficient insulin production. Management includes lifestyle changes, medication, and regular blood sugar monitoring."
+        }
+      },
+      {
+        "status_code": 200,
+        "success": true,
+        "response_time": 0.004473,
+        "content_type": "application/json",
+        "response": {
+          "response": "I can help you check your risk of late-onset preeclampsia. To provide an accurate assessment, I need the following 30 variables from your medical tests:\n\n1. Gestational age\n2. Albumin level\n3. Alkaline phosphate level\n4. Alanine transaminase level\n5. Aspartate transaminase level\n6. Blood urea nitrogen level\n7. Calcium level\n8. Cholesterol level\n9. Serum creatinine level\n10. C-reactive protein level\n11. Erythrocyte sedimentation rate\n12. Gamma-glutamyl transferase (GGT) level\n13. Glucose level\n14. Hemoglobin\n15. Potassium\n16. Magnesium\n17. Platelet count\n18. Total bilirubin\n19. Total CO2 (bicarbonate)\n20. Total protein\n21. Uric acid\n22. Urine albumin-to-creatinine ration\n23. Urine protein/creatinine ratio\n24. White blood cell count\n25. Systolic blood pressure\n26. Diastolic blood pressure\n27. Protein level in urine\n28. Height (cm)\n29. Maternal weight at pregnancy (kg)\n30. Fundal height (cm)\n\nPlease provide these values as comma-separated numbers in the order listed above. You can also upload an image of your test results using the 'Extract Variables from Test Result Image' feature above."
+        }
+      },
+      {
+        "status_code": 200,
+        "success": true,
+        "response_time": 5.306523,
+        "content_type": "application/json",
+        "response": {
+          "response": "High blood pressure, also known as hypertension, is often called the \"silent killer\" because it typically has no symptoms. However, in some cases, individuals with high blood pressure may experience symptoms such as severe headaches, fatigue or confusion, vision problems, chest pain, difficulty breathing, irregular heartbeat, and blood in the urine. It's important to note that these symptoms are not specific to high blood pressure and can be indicative of other health issues as well. Regular blood pressure checks are the best way to diagnose high blood pressure. If any of these symptoms are experienced, it's crucial to seek medical attention promptly."
+        }
+      },
+      {
+        "status_code": 200,
+        "success": true,
+        "response_time": 4.661515,
+        "content_type": "application/json",
+        "response": {
+          "response": "Symptoms of preeclampsia include high blood pressure, protein in the urine, swelling, headaches, changes in vision, upper abdominal pain, nausea, and shortness of breath."
+        }
+      }
+    ],
+    "prediction": [
+      {
+        "status_code": 200,
+        "success": true,
+        "response_time": 0.014353,
+        "content_type": "application/json",
+        "response": {
+          "response": "No risk of late-onset preeclampsia"
+        }
+      },
+      {
+        "status_code": 500,
+        "success": false,
+        "response_time": 0.005403,
+        "content_type": "text/plain; charset=utf-8",
+        "response": "Internal Server Error"
+      },
+      {
+        "status_code": 500,
+        "success": false,
+        "response_time": 0.016756,
+        "content_type": "text/plain; charset=utf-8",
+        "response": "Internal Server Error"
+      },
+      {
+        "status_code": 422,
+        "success": false,
+        "response_time": 0.004451,
+        "content_type": "application/json",
+        "response": {
+          "detail": [
+            {
+              "type": "float_parsing",
+              "loc": [
+                "body",
+                "variables",
+                0
+              ],
+              "msg": "Input should be a valid number, unable to parse string as a number",
+              "input": "invalid"
+            },
+            {
+              "type": "float_parsing",
+              "loc": [
+                "body",
+                "variables",
+                1
+              ],
+              "msg": "Input should be a valid number, unable to parse string as a number",
+              "input": "data"
+            }
+          ]
+        }
+      }
+    ],
+    "variables": [
+      {
+        "status_code": 200,
+        "success": true,
+        "response_time": 1.340398,
+        "content_type": "application/json",
+        "response": {
+          "variables": [
+            75.0,
+            165.0,
+            27.5,
+            1.0,
+            0.0,
+            120.0,
+            80.0,
+            98.0,
+            36.8,
+            72.0,
+            14.2,
+            4.5,
+            142.0,
+            4.2,
+            98.0,
+            24.0,
+            1.2,
+            45.0,
+            3.5,
+            1.8,
+            150.0,
+            8.5,
+            35.0,
+            0.9,
+            7.4,
+            2.1,
+            0.8,
+            12.0,
+            180.0,
+            95.0
+          ]
+        }
+      },
+      {
+        "status_code": 200,
+        "success": true,
+        "response_time": 1.760682,
+        "content_type": "application/json",
+        "response": {
+          "error": "Expected 30 values, got 31. Output: 30.383824, 0.047224, 2.114673, 59.325487, 13.12165, 16.193501, 5.908047, 5.209185, 149.911673, 0.410707, 5.840941, 3.739687, 9.71455, 66.197603, 2.134625, 2.607922, 0.070634, 199.839308, 0.281055, 13.475048, 3.761391, 2.503311, 31.665389, 0.203468, 8.857324, 111.964249, 67.989443, 963.371447, 160.779131, 60.139828, 58.334186"
+        }
+      },
+      {
+        "status_code": 200,
+        "success": true,
+        "response_time": 1.939774,
+        "content_type": "application/json",
+        "response": {
+          "error": "Expected 30 values, got 31. Output: 30.383824, 0.047224, 2.114673, 59.325487, 13.12165, 16.193501, 5.908047, 5.209185, 149.911673, 0.410707, 5.840941, 3.739687, 9.71455, 66.197603, 2.134625, 2.607922, 0.070634, 199.839308, 0.281055, 13.475048, 3.761391, 2.503311, 31.665389, 0.203468, 8.857324, 111.964249, 67.989443, 963.371447, 160.779131, 60.139828, 58.334186"
+        }
+      },
+      {
+        "status_code": 200,
+        "success": true,
+        "response_time": 1.807856,
+        "content_type": "application/json",
+        "response": {
+          "error": "Expected 30 values, got 31. Output: 30.383824,0.047224,2.114673,59.325487,13.12165,16.193501,5.908047,5.209185,149.911673,0.410707,5.840941,3.739687,9.71455,66.197603,2.134625,2.607922,0.070634,199.839308,0.281055,13.475048,3.761391,2.503311,31.665389,0.203468,8.857324,111.964249,67.989443,963.371447,160.779131,60.139828,58.334186"
+        }
+      }
+    ],
+    "image": [
+      {
+        "status_code": 500,
+        "success": false,
+        "response_time": 0.652889,
+        "content_type": "text/plain; charset=utf-8",
+        "response": "Internal Server Error"
+      },
+      {
+        "status_code": 500,
+        "success": false,
+        "response_time": 0.675533,
+        "content_type": "text/plain; charset=utf-8",
+        "response": "Internal Server Error"
+      },
+      {
+        "status_code": 422,
+        "success": false,
+        "response_time": 0.00827,
+        "content_type": "application/json",
+        "response": {
+          "detail": [
+            {
+              "type": "missing",
+              "loc": [
+                "body",
+                "files"
+              ],
+              "msg": "Field required",
+              "input": null
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
