@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import chat, prediction, image, variables
-
+from app.core.config import POSTGRES_DATABASE_URL
+print(POSTGRES_DATABASE_URL)
 # Create FastAPI app
 app = FastAPI(title="Medical AI Assistant", description="AI-powered medical assistant for preeclampsia risk assessment")
 

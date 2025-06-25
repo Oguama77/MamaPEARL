@@ -4,7 +4,7 @@ from typing import List
 
 class ChatInput(BaseModel):
     message: str
-    user_id: str  # Unique identifier for the user to maintain per-user memory
+    session_id: int  # ID of the chat session for context
 
 
 class FormInput(BaseModel):

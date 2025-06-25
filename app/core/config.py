@@ -13,6 +13,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 #     OPENAI_API_KEY = OPENAI_API_KEY.strip()
 MODEL_PATH = "model.pkl"
 SCALER_PATH = "scaler.pkl"
+POSTGRES_DATABASE_URL = os.getenv("POSTGRES_DATABASE_URL")
 
 # Mean values for missing variables
 MEAN_VALUES = [

@@ -7,4 +7,6 @@ openai>=1.0.0
 scikit-learn
 pydantic
 python-dotenv
-python-multipart 
+python-multipart
+sqlalchemy
+psycopg2-binary 

@@ -1,42 +1,43 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from app.schemas.requests import ChatInput
 from app.services.agent_service import agent
 from app.core.config import VARIABLE_LIST
-
-# Langchain imports for memory
-from langchain.memory import ConversationSummaryMemory
-from langchain_openai import ChatOpenAI
-from app.core.config import OPENAI_API_KEY
+from app.models import ChatSession, ChatMessage
+from app.models.ml_models import SessionLocal
+from sqlalchemy.orm import Session
+import datetime
 
 router = APIRouter()
 
-# In-memory store for user conversation memories
-user_memories = {}
-
-def get_user_memory(user_id: str):
-    """Retrieve or create a ConversationSummaryMemory for a user."""
-    if user_id not in user_memories:
-        llm = ChatOpenAI(
-            temperature=0.7,
-            openai_api_key=OPENAI_API_KEY,
-            model="gpt-3.5-turbo"
-        )
-        user_memories[user_id] = ConversationSummaryMemory(
-            llm=llm,
-            memory_key="chat_history",
-            return_messages=True
-        )
-    return user_memories[user_id]
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 @router.post("/chat")
-async def chat_endpoint(data: ChatInput):
-    """Handle chat messages and provide medical assistance with context memory."""
-    
+async def chat_endpoint(data: ChatInput, db: Session = Depends(get_db)):
+    """Handle chat messages and provide medical assistance with DB-backed context."""
     if not agent:
         return {"response": "OpenAI API key not configured. Please set OPENAI_API_KEY environment variable to use this feature."}
-    
-    # Get or create the user's conversation memory
-    memory = get_user_memory(data.user_id)
+
+    # Fetch the session
+    session = db.query(ChatSession).filter(ChatSession.id == data.session_id).first()
+    if not session:
+        return {"response": "Invalid session_id. Please start a new session."}
+    user_id = session.user_id
+
+    # Fetch all messages for this session, ordered by created_at
+    messages = db.query(ChatMessage).filter(ChatMessage.session_id == data.session_id).order_by(ChatMessage.created_at).all()
+
+    # Build conversation context for the LLM
+    conversation = []
+    for msg in messages:
+        role = "user" if msg.type == "user" else "assistant"
+        conversation.append({"role": role, "content": msg.content})
+    # Add the new user message
+    conversation.append({"role": "user", "content": data.message})
 
     # Classify the user's intent
     intent_prompt = f"""
@@ -49,10 +50,6 @@ async def chat_endpoint(data: ChatInput):
     
     Intent:"""
     try:
-        # Use memory to summarize previous conversation for context
-        summary = memory.load_memory_variables({}).get("chat_history", "")
-        # Prepend summary/context to the prompt
-        context_message = f"Previous conversation summary: {summary}\nUser: {data.message}" if summary else data.message
         intent_response = agent.invoke({"input": intent_prompt})
         intent = intent_response["output"].strip().upper()
         if intent == "RISK_ASSESSMENT":
@@ -66,36 +63,33 @@ async def chat_endpoint(data: ChatInput):
                 "\nPlease provide these values as comma-separated numbers in the order listed above. "
                 "You can also upload an image of your test results using the 'Extract Variables from Test Result Image' feature above."
             )
-            # Save the interaction to memory
-            memory.save_context({"input": data.message}, {"output": response_text})
-            return {"response": response_text}
+            assistant_reply = response_text
         else:
-            # Handle general healthcare questions and informational requests
-            # Use memory for context
-            llm = ChatOpenAI(
-                temperature=0.7,
-                openai_api_key=OPENAI_API_KEY,
-                model="gpt-3.5-turbo"
-            )
-            # Compose the prompt with context
-            prompt = f"Previous conversation summary: {summary}\nUser: {data.message}" if summary else data.message
-            response = llm.invoke([
-                {"role": "system", "content": "You are a friendly and knowledgeable medical AI assistant. You help users with healthcare-related questions and general conversation."},
-                {"role": "user", "content": prompt}
-            ])
-            memory.save_context({"input": data.message}, {"output": response.content})
-            return {"response": response.content}
-    except Exception as e:
-        # Fallback to general response if intent classification fails
-        llm = ChatOpenAI(
-            temperature=0.7,
-            openai_api_key=OPENAI_API_KEY,
-            model="gpt-3.5-turbo"
+            # Use conversation context for general/informational questions
+            response = agent.llm.invoke(conversation)
+            assistant_reply = response.content if hasattr(response, 'content') else response["output"]
+        # Store the new user message
+        user_msg = ChatMessage(
+            session_id=data.session_id,
+            user_id=user_id,
+            type="user",
+            content=data.message,
+            created_at=datetime.datetime.utcnow()
         )
-        prompt = f"Previous conversation summary: {summary}\nUser: {data.message}" if summary else data.message
-        response = llm.invoke([
-            {"role": "system", "content": "You are a friendly and knowledgeable medical AI assistant. You help users with healthcare-related questions and general conversation."},
-            {"role": "user", "content": prompt}
-        ])
-        memory.save_context({"input": data.message}, {"output": response.content})
-        return {"response": response.content} 
+        db.add(user_msg)
+        # Store the assistant's reply
+        assistant_msg = ChatMessage(
+            session_id=data.session_id,
+            user_id=user_id,
+            type="assistant",
+            content=assistant_reply,
+            created_at=datetime.datetime.utcnow()
+        )
+        db.add(assistant_msg)
+        # Update session's updated_at
+        session.updated_at = datetime.datetime.utcnow()
+        db.commit()
+        return {"response": assistant_reply}
+    except Exception as e:
+        db.rollback()
+        return {"response": f"An error occurred: {str(e)}"} 

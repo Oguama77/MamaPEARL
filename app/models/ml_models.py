@@ -1,5 +1,21 @@
+import os
 import joblib
-from app.core.config import MODEL_PATH, SCALER_PATH
+from app.core.config import MODEL_PATH, SCALER_PATH, POSTGRES_DATABASE_URL
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from dotenv import load_dotenv
+load_dotenv()
+
+
+engine = create_engine(POSTGRES_DATABASE_URL, echo=False)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+# Attempt to connect to the database and print a message
+try:
+    with engine.connect() as connection:
+        print("[DB] Successfully connected to the PostgreSQL database.")
+except Exception as e:
+    print(f"[DB] Failed to connect to the PostgreSQL database: {e}")
 
 
 class PreeclampsiaModel:
