@@ -1,48 +1,55 @@
-from langchain.tools import Tool
-from langchain.agents import initialize_agent, AgentType
 from langchain_openai import ChatOpenAI
 from app.core.config import OPENAI_API_KEY
-from app.models.ml_models import preeclampsia_model
 
 
-# LangChain LLM setup - only initialize if API key is available
+# Simple LLM setup for better conversational experience
 llm = None
-agent = None
 
 if OPENAI_API_KEY:
-    llm = ChatOpenAI(temperature=0, openai_api_key=OPENAI_API_KEY)
+    llm = ChatOpenAI(
+        temperature=0.7,  # Slightly more creative for conversation
+        openai_api_key=OPENAI_API_KEY,
+        model="gpt-3.5-turbo"
+    )
 
-    def general_healthcare_qa(query: str) -> str:
-        """General LLM tool for healthcare Q&A"""
-        system_prompt = (
-            "You are a helpful and knowledgeable medical assistant. "
-            "Provide detailed, clear, and informative answers to healthcare questions. "
-            "Your responses should be about 200 words long, unless the question is very simple."
-        )
-        return llm.invoke([
+
+def get_chat_response(message: str) -> str:
+    """Get a conversational response from the AI assistant"""
+    if not llm:
+        return "I'm sorry, I'm not configured to respond right now. Please check the API configuration."
+    
+    # Define the system prompt for the medical assistant
+    system_prompt = """You are a friendly and knowledgeable medical AI assistant. You help users with healthcare-related questions and general conversation.
+
+Key guidelines:
+- Be conversational and friendly
+- For greetings like "hi", "hello", respond naturally and ask how you can help
+- For medical questions, provide helpful, accurate information
+- For non-medical questions, politely redirect to healthcare topics while still being helpful
+- Keep responses concise but informative
+- Always encourage users to consult healthcare professionals for medical advice
+"""
+    
+    try:
+        messages = [
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": query}
-        ])
+            {"role": "user", "content": message}
+        ]
+        
+        response = llm.invoke(messages)
+        return response.content
+        
+    except Exception as e:
+        return f"I apologize, but I encountered an error while processing your message. Please try again."
 
-    # Define tools for LangChain
-    llm_tool = Tool(
-        name="General Healthcare QA",
-        func=general_healthcare_qa,
-        description="Answers general healthcare and medical questions."
-    )
 
-    preeclampsia_tool = Tool(
-        name="preeclampsia_predictor",
-        func=lambda x: preeclampsia_model.predict([float(i) for i in x.split(",")]),
-        description="Predicts late-onset preeclampsia from patient variables. Input should be a comma-separated list of floats."
-    )
+# Create a simple agent interface for backward compatibility
+class SimpleAgent:
+    def invoke(self, input_dict):
+        message = input_dict.get("input", "")
+        response = get_chat_response(message)
+        return {"output": response}
 
-    tools = [preeclampsia_tool, llm_tool]
 
-    # Initialize the agent
-    agent = initialize_agent(
-        tools,
-        llm,
-        agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-        verbose=True
-    )
+# Initialize the agent
+agent = SimpleAgent() if OPENAI_API_KEY else None
