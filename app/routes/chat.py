@@ -18,7 +18,7 @@ def get_db():
 
 @router.post("/chat")
 async def chat_endpoint(data: ChatInput, db: Session = Depends(get_db)):
-    """Handle chat messages and provide medical assistance with DB-backed context."""
+    """Handle chat messages and provide medical assistance with DB-backed context (read-only)."""
     if not agent:
         return {"response": "OpenAI API key not configured. Please set OPENAI_API_KEY environment variable to use this feature."}
 
@@ -36,7 +36,7 @@ async def chat_endpoint(data: ChatInput, db: Session = Depends(get_db)):
     for msg in messages:
         role = "user" if msg.type == "user" else "assistant"
         conversation.append({"role": role, "content": msg.content})
-    # Add the new user message
+    # Add the new user message (not saved to DB)
     conversation.append({"role": "user", "content": data.message})
 
     # Classify the user's intent
@@ -68,28 +68,6 @@ async def chat_endpoint(data: ChatInput, db: Session = Depends(get_db)):
             # Use conversation context for general/informational questions
             response = agent.llm.invoke(conversation)
             assistant_reply = response.content if hasattr(response, 'content') else response["output"]
-        # Store the new user message
-        user_msg = ChatMessage(
-            session_id=data.session_id,
-            user_id=user_id,
-            type="user",
-            content=data.message,
-            created_at=datetime.datetime.utcnow()
-        )
-        db.add(user_msg)
-        # Store the assistant's reply
-        assistant_msg = ChatMessage(
-            session_id=data.session_id,
-            user_id=user_id,
-            type="assistant",
-            content=assistant_reply,
-            created_at=datetime.datetime.utcnow()
-        )
-        db.add(assistant_msg)
-        # Update session's updated_at
-        session.updated_at = datetime.datetime.utcnow()
-        db.commit()
         return {"response": assistant_reply}
     except Exception as e:
-        db.rollback()
         return {"response": f"An error occurred: {str(e)}"} 
