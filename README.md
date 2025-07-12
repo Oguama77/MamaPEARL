@@ -5,7 +5,7 @@ This project is a conversational AI system that predicts the risk of **late-onse
 
 ---
 
-## 🩺 Project Description
+## Project Description
 
 Preeclampsia is a life-threatening pregnancy complication often detected late. This solution uses a Random Forest classifier trained on clinical variables such as blood pressure, kidney and liver function, urine protein levels, and other biomarkers to assess the likelihood of developing preeclampsia.
 
@@ -13,17 +13,17 @@ Users interact with the system via a chatbot that accepts natural language descr
 
 ---
 
-## 💡 Key Features
+## Key Features
 
-- 🤝 **Conversational AI**: Accepts free-text inputs like "My blood pressure is 140/90 and creatinine is 1.2"  
-- 🧠 **Machine Learning Model**: Trained using a Random Forest classifier with 0.97 accuracy and 0.90 AUC  
-- 🔬 **Medical Data Handling**: Accepts over 25 lab and clinical variables from blood and urine tests  
-- ☁️ **Deployment**: Frontend hosted on **Vercel**, backend API deployed on **Render**  
-- 📲 **Scalability Plan**: Future integration with **mobile apps** and **wearable devices** (e.g. smartwatches) for real-time monitoring and alerting  
+- **Conversational AI**: Accepts free-text inputs like "My blood pressure is 140/90 and creatinine is 1.2"  
+- **Machine Learning Model**: Trained using a Random Forest classifier with 0.97 accuracy and 0.90 AUC  
+- **Medical Data Handling**: Accepts over 25 lab and clinical variables from blood and urine tests  
+- **Deployment**: Frontend hosted on **Vercel**, backend API deployed on **Render**  
+- **Scalability Plan**: Future integration with **mobile apps** and **wearable devices** (e.g. smartwatches) for real-time monitoring and alerting  
 
 ---
 
-## 🗃️ Dataset
+## Dataset
 
 The model was trained on clinical data referenced from the paper:  
 > *"Prediction model development of late-onset preeclampsia using machine learning-based methods"* ([PLOS ONE, 2019](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0221202))
@@ -38,7 +38,7 @@ The model was trained on clinical data referenced from the paper:
 
 ---
 
-## 🧪 Model Performance
+## Model Performance
 
 | Metric         | Score     |
 |----------------|-----------|
@@ -48,7 +48,7 @@ The model was trained on clinical data referenced from the paper:
 
 ---
 
-## 📦 Installation
+## Installation
 
 ```bash
 # Clone the repository
