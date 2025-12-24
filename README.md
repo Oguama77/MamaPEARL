@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="docs/logo.png" alt="MamaPEARL Logo" width="300"/>
+</div>
+
 # MamaPEARL (Preeclampsia Early Alert and Response Lab)
 
 This project is a conversational AI system that predicts the risk of **late-onset preeclampsia** using clinical and laboratory data. It integrates a machine learning model with a natural language interface to make healthcare insights more accessible and proactive for expecting mothers. Find the web application ([here](https://preview--pearl-ai-whispers-form.lovable.app/chat))
@@ -85,6 +89,7 @@ MamaPEARL/
 │       └── __init__.py
 │
 ├── docs/
+|   ├── logo.png               # project logo for apps
 │   ├── project_overview.pdf   # Detailed research documentation and methodology
 │   ├── sample_lab_test.png    # Example lab test image for testing
 │   └── sample_requests.md     # API usage examples and request formats
