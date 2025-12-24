@@ -36,15 +36,7 @@ New to the project? Start here:
 ## Dataset
 
 The model was trained on clinical data referenced from the paper:  
-> *"Prediction model development of late-onset preeclampsia using machine learning-based methods"* ([PLOS ONE, 2019](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0221202))
-
-## Model Performance
-
-| Metric         | Score     |
-|----------------|-----------|
-| Accuracy       | 81%       |
-| PR-AUC         | 0.89      |
-| Inference Time | ~3 secs   |
+> *"Prediction model development of late-onset preeclampsia using machine learning-based methods"* ([Jhee et al., 2019](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0221202))
 
 ## Project Structure
 ```
