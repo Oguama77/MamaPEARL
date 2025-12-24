@@ -38,15 +38,6 @@ New to the project? Start here:
 The model was trained on clinical data referenced from the paper:  
 > *"Prediction model development of late-onset preeclampsia using machine learning-based methods"* ([PLOS ONE, 2019](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0221202))
 
-### Sample Features:
-- Gestational age  
-- Blood pressure (SBP, DBP)  
-- Serum creatinine, albumin, uric acid  
-- Liver enzymes (ALT, AST, ALP)  
-- Urine albumin-to-creatinine ratio  
-- Fundal height, maternal weight, haemoglobin  
-
-
 ## Model Performance
 
 | Metric         | Score     |
@@ -55,7 +46,8 @@ The model was trained on clinical data referenced from the paper:
 | PR-AUC         | 0.89      |
 | Inference Time | ~3 secs   |
 
-## Repository Structure
+## Project Structure
+```
 MamaPEARL/
 │   .gitignore              # Git ignore rules 
 │   main.py                 # Application entry point - runs the FastAPI server
@@ -109,6 +101,7 @@ MamaPEARL/
     ├── endpoint_test_report.json    # Detailed test results in JSON format
     ├── endpoint_test_summary.md     # Human-readable test summary
     └── test_endpoints.py            # API endpoint test suite
+```
 
 ## Installation
 
