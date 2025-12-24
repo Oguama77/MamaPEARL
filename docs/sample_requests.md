@@ -9,7 +9,7 @@ http://localhost:8000
 
 ---
 
-## 📋 Documentation Endpoints
+##  Documentation Endpoints
 
 ### 1. Swagger UI Documentation
 ```http
@@ -31,7 +31,7 @@ GET /openapi.json
 
 ---
 
-## 💬 Chat Endpoints
+##  Chat Endpoints
 
 ### 1. General Health Questions
 ```http
@@ -79,7 +79,7 @@ Content-Type: application/json
 
 ---
 
-## 🔮 Prediction Endpoints
+##  Prediction Endpoints
 
 ### 1. Preeclampsia Risk Prediction
 ```http
@@ -179,7 +179,7 @@ Content-Type: application/json
 
 ---
 
-## 🖼️ Image Processing Endpoints
+## Image Processing Endpoints
 
 ### 1. Extract Variables from Lab Test Image
 ```http
@@ -305,7 +305,7 @@ Content-Type: application/json
 
 ---
 
-## 🏠 Root Endpoint
+## Root Endpoint
 
 ### Welcome Message
 ```http
@@ -331,7 +331,7 @@ GET /
 
 ---
 
-## 📝 Required Variables for Prediction
+## Required Variables for Prediction
 
 The prediction model requires exactly **30 numerical variables** in this order:
 
@@ -368,7 +368,7 @@ The prediction model requires exactly **30 numerical variables** in this order:
 
 ---
 
-## 🚨 Error Responses
+## Error Responses
 
 ### Validation Error (422)
 ```json
@@ -400,7 +400,7 @@ The prediction model requires exactly **30 numerical variables** in this order:
 
 ---
 
-## 📊 Supported Image Formats
+## Supported Image Formats
 
 For the `/extract` endpoint, supported formats are:
 - **PNG** (.png)
